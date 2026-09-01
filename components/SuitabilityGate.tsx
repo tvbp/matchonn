@@ -41,7 +41,7 @@ export default function SuitabilityGate({ onAcknowledge }: { onAcknowledge: () =
         type="button"
         disabled={!allChecked}
         onClick={onAcknowledge}
-        className="mt-5 w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-40"
+        className="mt-5 w-full rounded-lg bg-accent-500 py-3 text-sm font-semibold text-white hover:bg-accent-600 disabled:cursor-not-allowed disabled:opacity-40"
       >
         I understand — show me illustrations
       </button>

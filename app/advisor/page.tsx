@@ -1,4 +1,4 @@
-import Link from "next/link";
+import FlowHeader from "@/components/FlowHeader";
 import AdvisorFlow from "@/components/AdvisorFlow";
 import { ProductType } from "@/lib/types";
 
@@ -11,13 +11,15 @@ export default function AdvisorPage({
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-3xl px-6 py-4">
-          <Link href="/" className="text-lg font-bold text-brand-700">
-            Matchonn
-          </Link>
-        </div>
-      </header>
+      <FlowHeader />
+
+      <div className="mx-auto max-w-3xl px-6 pt-10 text-center">
+        <h1 className="text-2xl font-bold text-slate-900">Let&apos;s find the right cover for you</h1>
+        <p className="mx-auto mt-2 max-w-xl text-sm text-slate-600">
+          Answer a few quick questions and we&apos;ll match you against real plans from top insurers in
+          seconds — no phone number required until you ask for one.
+        </p>
+      </div>
 
       <AdvisorFlow initialProduct={product} />
     </main>

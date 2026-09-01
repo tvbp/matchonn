@@ -23,6 +23,21 @@ See the business plan this app implements for the licensing path, commission
 economics, and the human → AI-assisted → AI-led roadmap this MVP is Phase 1
 of.
 
+## Design system
+
+- **Colors** (`tailwind.config.ts`): `brand` (indigo) for navigation, links,
+  and secondary emphasis; `accent` (coral) reserved for primary calls to
+  action — every "submit"/"continue"/"talk to an advisor" button across every
+  flow uses `accent`, so there's one consistent color that means "the next
+  step," not indigo doing double duty as both a brand color and a CTA color.
+- **Type**: Manrope for headings (`font-heading`, wired to `h1`-`h4` globally
+  in `app/globals.css` — no per-component class needed), Inter for body text,
+  both loaded via `next/font/google` in `app/layout.tsx`.
+- **Shared UI**: `components/Stepper.tsx` (progress steps), `components/
+  FlowHeader.tsx` (the back-to-home header every flow page uses),
+  `components/HandoffDone.tsx` (WhatsApp/call completion screen) — reused
+  across every flow instead of each page rolling its own.
+
 ## Why it's built this way
 
 - **AI never closes the sale.** Under current IRDAI rules, only a licensed

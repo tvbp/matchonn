@@ -27,19 +27,31 @@ export default function InvestmentIllustrationList({
         fund choice, and is not guaranteed. This is a simplified estimate (flat charges, no fund-level
         volatility) for comparison only.
       </p>
-      {illustrations.map((i) => (
+      {illustrations.map((i, idx) => (
         <button
           key={i.plan.id}
           type="button"
           onClick={() => onSelect(i.plan.id)}
-          className={`block w-full rounded-2xl border p-5 text-left transition ${
+          className={`relative block w-full rounded-2xl border p-5 text-left transition ${
             selectedPlanId === i.plan.id
-              ? "border-brand-600 bg-brand-50"
-              : "border-slate-200 bg-white hover:border-brand-300"
+              ? "border-brand-600 bg-brand-50 ring-1 ring-brand-600"
+              : "border-slate-200 bg-white hover:border-brand-300 hover:shadow-sm"
           }`}
         >
-          <div className="flex items-center justify-between">
+          {selectedPlanId === i.plan.id && (
+            <span className="absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded-full bg-brand-600 text-white">
+              <svg viewBox="0 0 24 24" fill="none" strokeWidth={2.5} stroke="currentColor" className="h-3.5 w-3.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </span>
+          )}
+          <div className="flex items-center justify-between gap-4">
             <div>
+              {idx === 0 && (
+                <span className="mb-1.5 inline-block whitespace-nowrap rounded-full bg-brand-100 px-2.5 py-0.5 text-xs font-semibold text-brand-700">
+                  Matches your risk profile
+                </span>
+              )}
               <p className="font-semibold text-slate-900">
                 {i.plan.insurer} — {i.plan.planName}
               </p>
@@ -48,7 +60,7 @@ export default function InvestmentIllustrationList({
                 · Allocation charge (yr 1): {i.plan.premiumAllocationChargeYear1Pct}%
               </p>
             </div>
-            <div className="text-right">
+            <div className="shrink-0 text-right">
               <p className="text-xs text-slate-500">Total invested (₹{i.totalPremiumsPaid.toLocaleString("en-IN")})</p>
               <p className="text-sm font-bold text-brand-700">
                 ₹{i.projectedValueAt4Pct.toLocaleString("en-IN")} – ₹{i.projectedValueAt8Pct.toLocaleString("en-IN")}

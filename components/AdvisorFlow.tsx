@@ -6,6 +6,7 @@ import QuoteList from "./QuoteList";
 import ChatWidget from "./ChatWidget";
 import LeadForm, { LeadFormValues } from "./LeadForm";
 import HandoffDone from "./HandoffDone";
+import Stepper from "./Stepper";
 import { getAdvisorWhatsappLink } from "@/lib/whatsapp";
 import { describeQuotesForAdvisor } from "@/lib/quoteEngine";
 import { NeedsInput, ProductType, Quote } from "@/lib/types";
@@ -72,20 +73,7 @@ export default function AdvisorFlow({ initialProduct }: { initialProduct: Produc
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
-      <ol className="mb-8 flex justify-between text-xs font-medium text-slate-400">
-        {STEPS.map((s, i) => (
-          <li
-            key={s.key}
-            className={
-              step === s.key || STEPS.findIndex((x) => x.key === step) > i
-                ? "text-brand-600"
-                : ""
-            }
-          >
-            {i + 1}. {s.label}
-          </li>
-        ))}
-      </ol>
+      <Stepper steps={STEPS} currentKey={step} />
 
       {step === "needs" && <NeedsForm initialProduct={initialProduct} onSubmit={handleNeedsSubmit} />}
 
@@ -97,7 +85,7 @@ export default function AdvisorFlow({ initialProduct }: { initialProduct: Produc
           </div>
           <button
             onClick={() => setStep("lead")}
-            className="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white hover:bg-brand-700"
+            className="w-full rounded-lg bg-accent-500 py-3 text-sm font-semibold text-white hover:bg-accent-600"
           >
             {selectedPlanId ? "Talk to an advisor about this plan" : "Talk to an advisor"}
           </button>

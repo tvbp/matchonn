@@ -223,7 +223,7 @@ export default function GroupEnquiryForm({
       <button
         type="submit"
         disabled={submitting}
-        className="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-50"
+        className="w-full rounded-lg bg-accent-500 py-3 text-sm font-semibold text-white hover:bg-accent-600 disabled:opacity-50"
       >
         {submitting ? "Sending..." : "Request group insurance quotes"}
       </button>

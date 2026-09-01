@@ -19,8 +19,13 @@ export default function HandoffDone({
   description: string;
 }) {
   return (
-    <div className="rounded-2xl bg-white p-8 text-center shadow-sm">
-      <p className="text-lg font-semibold text-slate-900">{heading}</p>
+    <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-600">
+        <svg viewBox="0 0 24 24" fill="none" strokeWidth={2} stroke="currentColor" className="h-7 w-7">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </span>
+      <p className="mt-4 text-lg font-semibold text-slate-900">{heading}</p>
       <p className="mt-2 text-sm text-slate-600">{description}</p>
       <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
         <a

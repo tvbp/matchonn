@@ -89,7 +89,7 @@ export default function InvestmentNeedsForm({
 
       <button
         type="submit"
-        className="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white hover:bg-brand-700"
+        className="w-full rounded-lg bg-accent-500 py-3 text-sm font-semibold text-white hover:bg-accent-600"
       >
         Continue
       </button>

@@ -7,6 +7,7 @@ import InvestmentIllustrationList from "./InvestmentIllustrationList";
 import ChatWidget from "./ChatWidget";
 import LeadForm, { LeadFormValues } from "./LeadForm";
 import HandoffDone from "./HandoffDone";
+import Stepper from "./Stepper";
 import { getAdvisorWhatsappLink } from "@/lib/whatsapp";
 import { generateIllustrations, describeIllustrationsForAdvisor } from "@/lib/investmentEngine";
 import { InvestmentIllustration, InvestmentNeedsInput } from "@/lib/types";
@@ -22,10 +23,6 @@ const STEPS: { key: Step; label: string }[] = [
 
 const INVESTMENT_CONSENT_TEXT =
   "I consent to Matchonn and its licensed advisors contacting me about this investment-linked plan via phone, WhatsApp, or email. I understand the risk factors I acknowledged above, that projections shown are not guaranteed, and that fund selection and final suitability will be assessed by a licensed advisor, not the AI.";
-
-function stepIndex(step: Step): number {
-  return STEPS.findIndex((s) => s.key === step);
-}
 
 export default function InvestmentFlow() {
   const [step, setStep] = useState<Step>("needs");
@@ -81,13 +78,7 @@ export default function InvestmentFlow() {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
-      <ol className="mb-8 flex flex-wrap justify-between gap-2 text-xs font-medium text-slate-400">
-        {STEPS.map((s, i) => (
-          <li key={s.key} className={stepIndex(step) >= i ? "text-brand-600" : ""}>
-            {i + 1}. {s.label}
-          </li>
-        ))}
-      </ol>
+      <Stepper steps={STEPS} currentKey={step} />
 
       {step === "needs" && <InvestmentNeedsForm onSubmit={handleNeedsSubmit} />}
 
@@ -109,7 +100,7 @@ export default function InvestmentFlow() {
           </div>
           <button
             onClick={() => setStep("lead")}
-            className="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white hover:bg-brand-700"
+            className="w-full rounded-lg bg-accent-500 py-3 text-sm font-semibold text-white hover:bg-accent-600"
           >
             {selectedPlanId ? "Talk to an advisor about this plan" : "Talk to an advisor"}
           </button>
