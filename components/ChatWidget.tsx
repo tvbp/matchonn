@@ -1,21 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { NeedsInput, Quote } from "@/lib/types";
+import { ChatProduct } from "@/lib/chat";
 
 interface Turn {
   role: "user" | "assistant";
   content: string;
 }
 
-export default function ChatWidget({ needs, quotes }: { needs: NeedsInput; quotes: Quote[] }) {
-  const [turns, setTurns] = useState<Turn[]>([
-    {
-      role: "assistant",
-      content:
-        "Hi! I'm the Matchonn AI advisor. Ask me anything about these plans — cover amount, claim settlement ratio, waiting periods — and I'll help you make sense of it before you talk to a licensed advisor.",
-    },
-  ]);
+export default function ChatWidget({
+  product,
+  summary,
+  greeting = "Hi! I'm the Matchonn AI advisor. Ask me anything about these options and I'll help you make sense of it before you talk to a licensed advisor.",
+}: {
+  product: ChatProduct;
+  summary: string;
+  greeting?: string;
+}) {
+  const [turns, setTurns] = useState<Turn[]>([{ role: "assistant", content: greeting }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -29,7 +31,7 @@ export default function ChatWidget({ needs, quotes }: { needs: NeedsInput; quote
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ turns: nextTurns, needs, quotes }),
+        body: JSON.stringify({ turns: nextTurns, product, summary }),
       });
       const data = await res.json();
       setTurns([...nextTurns, { role: "assistant", content: data.reply ?? data.error }]);

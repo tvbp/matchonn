@@ -10,12 +10,21 @@ export interface LeadFormValues {
   consentGiven: boolean;
 }
 
+const DEFAULT_CONSENT_TEXT =
+  "I consent to Matchonn and its licensed advisors contacting me about insurance products via phone, WhatsApp, or email, and understand that any final advice and sale will be provided by a licensed advisor, not the AI.";
+
 export default function LeadForm({
   onSubmit,
   submitting,
+  heading = "Almost done — where should your advisor reach you?",
+  consentText = DEFAULT_CONSENT_TEXT,
+  submitLabel = "Connect me with an advisor",
 }: {
   onSubmit: (values: LeadFormValues) => void;
   submitting: boolean;
+  heading?: string;
+  consentText?: string;
+  submitLabel?: string;
 }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -31,7 +40,7 @@ export default function LeadForm({
         onSubmit({ name, phone, email: email || undefined, city, consentGiven });
       }}
     >
-      <h3 className="font-semibold text-slate-900">Almost done — where should your advisor reach you?</h3>
+      <h3 className="font-semibold text-slate-900">{heading}</h3>
       <div>
         <label className="block text-sm font-medium text-slate-700">Full name</label>
         <input
@@ -78,14 +87,14 @@ export default function LeadForm({
           onChange={(e) => setConsentGiven(e.target.checked)}
           className="mt-0.5 h-4 w-4 rounded border-slate-300"
         />
-        I consent to Matchonn and its licensed advisors contacting me about insurance products via phone, WhatsApp, or email, and understand that any final advice and sale will be provided by a licensed advisor, not the AI.
+        {consentText}
       </label>
       <button
         type="submit"
         disabled={submitting}
         className="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-50"
       >
-        {submitting ? "Saving..." : "Connect me with an advisor"}
+        {submitting ? "Saving..." : submitLabel}
       </button>
     </form>
   );

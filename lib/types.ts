@@ -51,6 +51,45 @@ export interface GroupMedicalEnquiry {
   contactDesignation: string;
 }
 
+export type InvestmentRiskAppetite = "conservative" | "balanced" | "aggressive";
+
+export interface InvestmentNeedsInput {
+  age: number;
+  annualPremium: number; // ₹, not lakh — ULIP premiums are usually well under ₹1L/year
+  horizonYears: number; // >= 5, enforced by the 5-year IRDAI lock-in on ULIPs
+  riskAppetite: InvestmentRiskAppetite;
+}
+
+export interface InvestmentPlan {
+  id: string;
+  insurer: string;
+  planName: string;
+  minEntryAge: number;
+  maxEntryAge: number;
+  lockInYears: number;
+  premiumAllocationChargeYear1Pct: number;
+  renewalAllocationChargePct: number;
+  annualFundManagementChargePct: number;
+  claimSettlementRatio: number;
+  fundCategory: InvestmentRiskAppetite;
+  highlights: string[];
+}
+
+/**
+ * Two projections at IRDAI's mandated illustration assumptions (4%/8% p.a.
+ * gross investment return) — neither is a promise, both are simplified
+ * (flat annual charges, no mortality table, no NAV volatility). See
+ * lib/investmentEngine.ts for the calculation and its caveats.
+ */
+export interface InvestmentIllustration {
+  plan: InvestmentPlan;
+  annualPremium: number;
+  horizonYears: number;
+  totalPremiumsPaid: number;
+  projectedValueAt4Pct: number;
+  projectedValueAt8Pct: number;
+}
+
 export interface Lead {
   id: string;
   createdAt: string;
@@ -61,8 +100,10 @@ export interface Lead {
   needs?: NeedsInput;
   selectedPlanId?: string;
   groupMedicalEnquiry?: GroupMedicalEnquiry;
+  investmentNeeds?: InvestmentNeedsInput;
+  suitabilityAcknowledged?: boolean;
   interestedIn: string[];
-  waitlistProducts?: string[]; // e.g. "investment", "marine-fire"
+  waitlistProducts?: string[]; // e.g. "marine-fire"
   consentGiven: boolean;
   advisorSummary?: string;
   source: string;

@@ -75,3 +75,23 @@ export function generateQuotes(input: NeedsInput): Quote[] {
     return scoreA - scoreB;
   });
 }
+
+/** One-paragraph summary handed to the AI advisor chat as context. */
+export function describeQuotesForAdvisor(input: NeedsInput, quotes: Quote[]): string {
+  const lines = [
+    `Customer context — product: ${input.productType}, age: ${input.age}, city tier: ${input.cityTier}, tobacco user: ${input.tobaccoUser}.`,
+  ];
+  if (quotes.length) {
+    lines.push(
+      "Shown quotes: " +
+        quotes
+          .slice(0, 4)
+          .map(
+            (q) =>
+              `${q.plan.insurer} ${q.plan.planName} (cover ₹${q.recommendedCoverLakh}L, ~₹${q.estimatedMonthlyPremium}/mo, CSR ${q.plan.claimSettlementRatio}%)`
+          )
+          .join("; ")
+    );
+  }
+  return lines.join("\n");
+}

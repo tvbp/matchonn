@@ -7,6 +7,7 @@ import ChatWidget from "./ChatWidget";
 import LeadForm, { LeadFormValues } from "./LeadForm";
 import HandoffDone from "./HandoffDone";
 import { getAdvisorWhatsappLink } from "@/lib/whatsapp";
+import { describeQuotesForAdvisor } from "@/lib/quoteEngine";
 import { NeedsInput, ProductType, Quote } from "@/lib/types";
 
 type Step = "needs" | "quotes" | "lead" | "done";
@@ -92,7 +93,7 @@ export default function AdvisorFlow({ initialProduct }: { initialProduct: Produc
         <div className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
             <QuoteList quotes={quotes} selectedPlanId={selectedPlanId} onSelect={setSelectedPlanId} />
-            <ChatWidget needs={needs} quotes={quotes} />
+            <ChatWidget product={needs.productType} summary={describeQuotesForAdvisor(needs, quotes)} />
           </div>
           <button
             onClick={() => setStep("lead")}

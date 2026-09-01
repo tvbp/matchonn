@@ -13,10 +13,7 @@ const LIVE_PRODUCTS = [
   },
 ];
 
-const COMING_SOON = [
-  { key: "investment", title: "Investment-linked plans (ULIP / endowment)" },
-  { key: "marine-fire", title: "Marine & Fire (commercial)" },
-];
+const COMING_SOON = [{ key: "marine-fire", title: "Marine & Fire (commercial)" }];
 
 export default function HomePage() {
   return (
@@ -90,6 +87,23 @@ export default function HomePage() {
           <span className="whitespace-nowrap text-sm font-semibold text-brand-600">Get a quote for your team →</span>
         </Link>
 
+        <Link
+          href="/invest"
+          className="mt-6 flex flex-col items-start justify-between gap-4 rounded-2xl border border-amber-200 bg-amber-50 p-6 shadow-sm transition hover:border-amber-400 hover:shadow-md sm:flex-row sm:items-center"
+        >
+          <div>
+            <span className="rounded-full bg-amber-600 px-3 py-1 text-xs font-semibold text-white">
+              Market-linked · Read the risks first
+            </span>
+            <h3 className="mt-3 text-lg font-semibold text-slate-900">Investment-linked plans (ULIPs)</h3>
+            <p className="mt-1 text-sm text-slate-600">
+              Insurance-cum-investment with a mandatory 5-year lock-in. Not a fixed-return product — we walk
+              you through the risks before showing any numbers.
+            </p>
+          </div>
+          <span className="whitespace-nowrap text-sm font-semibold text-amber-700">See how it works →</span>
+        </Link>
+
         <h3 className="mt-14 text-center text-lg font-semibold text-slate-700">
           Coming soon — join the waitlist
         </h3>
@@ -137,7 +151,10 @@ export default function HomePage() {
             estimates for comparison only, not a final quote — actual premium
             depends on medical underwriting and insurer terms. Insurance is
             the subject matter of solicitation. IRDAI registration details
-            will be published here once issued.
+            will be published here once issued. ULIPs (investment-linked
+            plans) are different from traditional insurance products and are
+            subject to market risk — projected values shown are illustrative,
+            not guaranteed, and depend on fund performance.
           </p>
         </div>
       </footer>

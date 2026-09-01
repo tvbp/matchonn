@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdvisorReply, ChatTurn } from "@/lib/chat";
-import { NeedsInput, Quote } from "@/lib/types";
+import { getAdvisorReply, ChatTurn, ChatProduct } from "@/lib/chat";
 
 export async function POST(req: NextRequest) {
   const body = (await req.json()) as {
     turns?: ChatTurn[];
-    needs?: NeedsInput;
-    quotes?: Quote[];
+    product?: ChatProduct;
+    summary?: string;
   };
 
   if (!body.turns?.length) {
@@ -15,8 +14,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const reply = await getAdvisorReply(body.turns, {
-      needs: body.needs,
-      quotes: body.quotes,
+      product: body.product,
+      summary: body.summary,
     });
     return NextResponse.json({ reply });
   } catch (err) {

@@ -9,6 +9,10 @@ India:
   → WhatsApp handoff to a specialist who runs it as an RFQ across the
   insurer panel — no instant quote, since group pricing depends on group
   composition and claims history.
+- **Investment-linked plans (`/invest`):** goals → a mandatory risk
+  acknowledgement gate → illustrative maturity projections (IRDAI's 4%/8%
+  convention) → AI chat (tightly scoped — no fund advice) → lead capture →
+  WhatsApp handoff to a licensed advisor for suitability and fund selection.
 
 See the business plan this app implements for the licensing path, commission
 economics, and the human → AI-assisted → AI-led roadmap this MVP is Phase 1
@@ -39,6 +43,22 @@ of.
   (headcount, industry, desired cover, current insurer/renewal date) and
   hands straight to a specialist rather than pretending to price it
   instantly.
+- **Investment-linked plans get a mandatory risk acknowledgement gate before
+  any numbers are shown.** Per the business plan: mis-selling ULIPs is the
+  most common reason distributors lose their IRDAI license. `/invest`
+  (`components/SuitabilityGate.tsx`) requires four explicit checkboxes
+  (market-linked not fixed-return, 5-year lock-in, no guaranteed return,
+  charges reduce the invested amount) before `components/InvestmentFlow.tsx`
+  will show illustrations, and the acknowledgement is recorded on the lead
+  (`suitabilityAcknowledged`) as part of the audit trail. The AI chat's
+  system prompt (`lib/chat.ts`) has a stricter rule set for this product:
+  never recommend a specific fund or allocation, never imply a return is
+  likely, never compare against mutual funds/FDs/stocks (that's investment
+  advice, which needs separate SEBI registration, not just an IRDAI one) —
+  fund selection and final suitability are pushed to the licensed advisor.
+  Illustrations use IRDAI's mandated 4%/8% assumed-return convention, net of
+  a simplified charge model (`lib/investmentEngine.ts`) — no NAV volatility,
+  no mortality table, clearly labeled as indicative.
 - **Admin dashboard auth** (`/admin`) is a single shared password
   (`ADMIN_PASSWORD`) behind an httpOnly cookie — enough for one or two people
   reviewing leads early on. Replace with real per-user auth before handing
@@ -81,19 +101,26 @@ app/
   page.tsx                 Landing page
   advisor/page.tsx          The needs → quotes → chat → lead flow (consumer)
   business/page.tsx          The group medical enquiry flow (B2B)
+  invest/page.tsx             The investment-linked (ULIP) flow
   admin/page.tsx             Leads dashboard (password-gated)
   api/quotes/route.ts       Computes indicative quotes (lib/quoteEngine.ts)
   api/chat/route.ts          AI advisor chat (lib/chat.ts)
-  api/leads/route.ts         Saves a lead, consumer or B2B (lib/db.ts)
+  api/leads/route.ts         Saves a lead, any flow (lib/db.ts)
   api/admin/login/route.ts   Admin cookie auth
-components/                UI for each flow (advisor, group enquiry, admin);
-                             HandoffDone.tsx is the shared WhatsApp/call step
+components/                UI for each flow (advisor, group enquiry, invest,
+                             admin); HandoffDone.tsx is the shared WhatsApp/
+                             call step, ChatWidget.tsx is the shared AI chat UI
 lib/
   types.ts                  Shared domain types (NeedsInput, InsurerPlan, Quote,
-                              GroupMedicalEnquiry, Lead)
-  plans.ts                   Mock insurer/plan data — replace with a real feed later
-  quoteEngine.ts              Cover recommendation + premium estimate + ranking
-  chat.ts                     AI advisor (Claude) + offline fallback
+                              GroupMedicalEnquiry, InvestmentNeedsInput/Plan/
+                              Illustration, Lead)
+  plans.ts                   Mock term/health insurer data — replace with a
+                              real feed later
+  quoteEngine.ts              Term/health cover recommendation + premium + ranking
+  investmentPlans.ts           Mock ULIP plan/charge data
+  investmentEngine.ts          4%/8% illustration calculation (see caveats inline)
+  chat.ts                     AI advisor (Claude) + offline fallback, with
+                               per-product rule sets (term/health/investment)
   whatsapp.ts                  Builds the wa.me handoff link
   db.ts                       JSON file-backed lead store
   adminAuth.ts                 Admin cookie token logic
@@ -101,11 +128,11 @@ lib/
 
 ## What's intentionally not built yet
 
-- Real insurer/aggregator API integration (quotes are illustrative)
+- Real insurer/aggregator API integration (quotes/illustrations are
+  illustrative, not live rates)
 - Payment / policy issuance (out of scope — a licensed advisor closes off-app)
-- Investment-linked (ULIP/endowment) and marine & fire lines — the landing
-  page collects waitlist interest for these, per the Phase 1 product
-  sequencing (they're deliberately last: highest mis-selling risk /
-  lowest fit for a self-serve app)
+- Marine & fire (commercial) — the landing page collects waitlist interest;
+  it's last in the Phase 1 sequencing (niche, relationship-driven B2B, low
+  fit for a self-serve app)
 - Automated renewal reminders / cross-sell (Phase 2)
 - Multi-language advisor conversation (Phase 3)

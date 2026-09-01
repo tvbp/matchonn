@@ -1,26 +1,25 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { NeedsInput, Quote } from "./types";
 
 export interface ChatTurn {
   role: "user" | "assistant";
   content: string;
 }
 
-const SYSTEM_PROMPT = `You are the Matchonn AI insurance advisor for customers in India.
+export type ChatProduct = "term" | "health" | "investment";
 
-Your job: ask short clarifying questions to understand the customer's insurance
-need (term life or health insurance), explain how to think about cover amount
-and plan features in plain language, and help them compare the plans already
-shown to them.
+const BASE_SYSTEM_PROMPT = `You are the Matchonn AI insurance advisor for customers in India.
+
+Your job: ask short clarifying questions to understand the customer's need,
+explain how to think about the product in plain language, and help them
+compare the options already shown to them.
 
 Hard rules (India IRDAI compliance — do not break these):
 - You are an AI assistant, not a licensed insurance agent. Never claim to be
   human, never claim to be a licensed advisor.
 - Never finalize a sale, never collect payment, never promise a specific
   claim will be paid — claims depend on full underwriting and policy terms.
-- Do not guarantee investment returns or "best" plan in absolute terms;
-  present trade-offs (premium, claim settlement ratio, network hospitals,
-  waiting periods) and let the customer decide.
+- Do not claim any plan is the "best" in absolute terms; present trade-offs
+  and let the customer decide.
 - Always close by offering to connect the customer to a licensed human
   advisor (POSP) for the actual purchase and final advice — you can pre-fill
   what you learned for that handoff, but the sale itself must go through a
@@ -28,38 +27,62 @@ Hard rules (India IRDAI compliance — do not break these):
 - Keep answers short (3-6 sentences), friendly, and in plain English (or the
   customer's language if they switch).`;
 
-function buildContextBlock(needs?: NeedsInput, quotes?: Quote[]): string {
-  if (!needs) return "";
-  const lines = [
-    `Customer context — product: ${needs.productType}, age: ${needs.age}, city tier: ${needs.cityTier}, tobacco user: ${needs.tobaccoUser}.`,
-  ];
-  if (quotes?.length) {
-    lines.push(
-      "Shown quotes: " +
-        quotes
-          .slice(0, 4)
-          .map(
-            (q) =>
-              `${q.plan.insurer} ${q.plan.planName} (cover ₹${q.recommendedCoverLakh}L, ~₹${q.estimatedMonthlyPremium}/mo, CSR ${q.plan.claimSettlementRatio}%)`
-          )
-          .join("; ")
-    );
-  }
-  return lines.join("\n");
+const PRODUCT_RULES: Record<ChatProduct, string> = {
+  term: `This conversation is about term life insurance. Talk about sum assured
+sizing, claim settlement ratio, and rider options. Do not guarantee any
+claim will be paid.`,
+  health: `This conversation is about health insurance. Talk about sum insured
+sizing, claim settlement ratio, network hospitals, and waiting periods. Do
+not guarantee any claim will be paid.`,
+  investment: `This conversation is about an investment-linked insurance plan (ULIP).
+This is higher-risk territory — mis-selling these is the most common reason
+distributors lose their IRDAI license, so follow these strictly:
+- NEVER recommend a specific fund, fund allocation, or asset mix. Fund
+  selection is a suitability decision for the customer and the licensed
+  advisor, not you.
+- NEVER state or imply a specific return is likely, guaranteed, or safe. The
+  4%/8% figures shown are IRDAI-mandated illustration assumptions, not
+  predictions — always describe them that way, never round them off as "you
+  could expect ~6%" or similar.
+- NEVER compare this plan's returns against mutual funds, FDs, stocks, or
+  other investment products in a way that recommends one over another —
+  that is investment advice, which is outside both your role and IRDAI's
+  remit (it needs separate SEBI registration).
+- Always mention the mandatory 5-year lock-in and that allocation/fund
+  management charges reduce the invested amount when relevant.
+- Push harder than usual toward the human advisor for anything about
+  suitability, fund choice, or "should I buy this" — say you can't advise
+  on that.`,
+};
+
+function buildSystemPrompt(product?: ChatProduct, summary?: string): string {
+  const parts = [BASE_SYSTEM_PROMPT];
+  if (product) parts.push(PRODUCT_RULES[product]);
+  if (summary) parts.push(summary);
+  return parts.join("\n\n");
 }
 
-function fallbackReply(turns: ChatTurn[], needs?: NeedsInput): string {
+function fallbackReply(turns: ChatTurn[], product?: ChatProduct): string {
   const lastUser = [...turns].reverse().find((t) => t.role === "user")?.content ?? "";
   const text = lastUser.toLowerCase();
 
-  if (!needs) {
-    return "I'm the Matchonn AI advisor. To get started, could you tell me whether you're looking at term life insurance or health insurance, and your age?";
+  if (!product) {
+    return "I'm the Matchonn AI advisor. To get started, could you tell me what you're looking for and a bit about yourself?";
+  }
+  if (product === "investment") {
+    if (text.includes("guarantee") || text.includes("return") || text.includes("fund")) {
+      return "I can't recommend specific funds or promise a return — the 4%/8% figures shown are IRDAI-mandated illustration assumptions, not predictions, and actual returns depend on market performance and the funds you choose. A licensed advisor can walk you through fund options and suitability.";
+    }
+    if (text.includes("lock") || text.includes("withdraw")) {
+      return "ULIPs have a mandatory 5-year lock-in set by IRDAI — you can't withdraw before that (barring specific exceptions). A licensed advisor can explain partial withdrawal rules after lock-in for the plan you're considering.";
+    }
+    return "Good question — I'm running in offline/demo mode right now (no AI backend configured), so I can only answer a few common questions directly. For anything about suitability or fund choice, let's get you to a licensed advisor.";
   }
   if (text.includes("claim") || text.includes("settlement")) {
     return "Claim settlement ratio (CSR) is the % of claims an insurer paid out last year — higher is generally better, but always check it alongside network hospitals and waiting periods, not in isolation. I can connect you with a licensed advisor to walk through the fine print before you decide.";
   }
   if (text.includes("cover") || text.includes("sum assured") || text.includes("sum insured")) {
-    return needs.productType === "term"
+    return product === "term"
       ? "A common starting point is 15-20x your annual income in term cover, adjusted for existing loans and dependents — the quotes above already use that as a baseline. A licensed advisor can help fine-tune it to your situation."
       : "For health cover, family size and city (metro hospital costs run higher) matter most — the quotes above are sized on that basis. Happy to connect you with a licensed advisor to sanity-check the number.";
   }
@@ -68,19 +91,18 @@ function fallbackReply(turns: ChatTurn[], needs?: NeedsInput): string {
 
 export async function getAdvisorReply(
   turns: ChatTurn[],
-  context?: { needs?: NeedsInput; quotes?: Quote[] }
+  context?: { product?: ChatProduct; summary?: string }
 ): Promise<string> {
   if (!process.env.ANTHROPIC_API_KEY) {
-    return fallbackReply(turns, context?.needs);
+    return fallbackReply(turns, context?.product);
   }
 
   const client = new Anthropic();
-  const contextBlock = buildContextBlock(context?.needs, context?.quotes);
 
   const response = await client.messages.create({
     model: process.env.ANTHROPIC_MODEL || "claude-opus-5",
     max_tokens: 1024,
-    system: contextBlock ? `${SYSTEM_PROMPT}\n\n${contextBlock}` : SYSTEM_PROMPT,
+    system: buildSystemPrompt(context?.product, context?.summary),
     output_config: { effort: "medium" },
     messages: turns.map((t) => ({ role: t.role, content: t.content })),
   });
