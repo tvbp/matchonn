@@ -1,12 +1,11 @@
 import Link from "next/link";
 import AdvisorFlow from "@/components/AdvisorFlow";
-import WaitlistForm from "@/components/WaitlistForm";
 import { ProductType } from "@/lib/types";
 
 export default function AdvisorPage({
   searchParams,
 }: {
-  searchParams: { product?: string; waitlist?: string };
+  searchParams: { product?: string };
 }) {
   const product: ProductType = searchParams.product === "health" ? "health" : "term";
 
@@ -20,13 +19,7 @@ export default function AdvisorPage({
         </div>
       </header>
 
-      {searchParams.waitlist ? (
-        <div className="mx-auto max-w-md px-6 py-16">
-          <WaitlistForm product={searchParams.waitlist} />
-        </div>
-      ) : (
-        <AdvisorFlow initialProduct={product} />
-      )}
+      <AdvisorFlow initialProduct={product} />
     </main>
   );
 }

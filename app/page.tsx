@@ -13,8 +13,6 @@ const LIVE_PRODUCTS = [
   },
 ];
 
-const COMING_SOON = [{ key: "marine-fire", title: "Marine & Fire (commercial)" }];
-
 export default function HomePage() {
   return (
     <main className="min-h-screen">
@@ -104,20 +102,22 @@ export default function HomePage() {
           <span className="whitespace-nowrap text-sm font-semibold text-amber-700">See how it works →</span>
         </Link>
 
-        <h3 className="mt-14 text-center text-lg font-semibold text-slate-700">
-          Coming soon — join the waitlist
-        </h3>
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          {COMING_SOON.map((p) => (
-            <Link
-              key={p.key}
-              href={`/advisor?waitlist=${p.key}`}
-              className="rounded-xl border border-dashed border-slate-300 bg-white p-4 text-center text-sm font-medium text-slate-600 hover:border-brand-300 hover:text-brand-700"
-            >
-              {p.title}
-            </Link>
-          ))}
-        </div>
+        <Link
+          href="/marine-fire"
+          className="mt-6 flex flex-col items-start justify-between gap-4 rounded-2xl border border-brand-200 bg-brand-50 p-6 shadow-sm transition hover:border-brand-400 hover:shadow-md sm:flex-row sm:items-center"
+        >
+          <div>
+            <span className="rounded-full bg-brand-600 px-3 py-1 text-xs font-semibold text-white">
+              For businesses
+            </span>
+            <h3 className="mt-3 text-lg font-semibold text-slate-900">Fire & Marine Insurance</h3>
+            <p className="mt-1 text-sm text-slate-600">
+              Property, stock, and cargo cover for your business — tell us the details once and a specialist
+              runs it as an RFQ across our insurer panel.
+            </p>
+          </div>
+          <span className="whitespace-nowrap text-sm font-semibold text-brand-600">Get a quote →</span>
+        </Link>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-16">

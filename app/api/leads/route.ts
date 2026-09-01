@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
     groupMedicalEnquiry: body.groupMedicalEnquiry,
     investmentNeeds: body.investmentNeeds,
     suitabilityAcknowledged: body.suitabilityAcknowledged,
+    commercialEnquiry: body.commercialEnquiry,
     interestedIn: body.interestedIn ?? [],
     waitlistProducts: body.waitlistProducts ?? [],
     consentGiven: true,

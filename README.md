@@ -13,6 +13,11 @@ India:
   acknowledgement gate → illustrative maturity projections (IRDAI's 4%/8%
   convention) → AI chat (tightly scoped — no fund advice) → lead capture →
   WhatsApp handoff to a licensed advisor for suitability and fund selection.
+- **Marine & Fire (B2B, `/marine-fire`):** a company enquiry form (choose
+  fire/property or marine/cargo, each with its own fields) → lead capture →
+  WhatsApp handoff to a specialist — no instant quote, since commercial
+  property/cargo risk is underwriting-heavy and larger sums insured often
+  need a physical survey.
 
 See the business plan this app implements for the licensing path, commission
 economics, and the human → AI-assisted → AI-led roadmap this MVP is Phase 1
@@ -59,6 +64,15 @@ of.
   Illustrations use IRDAI's mandated 4%/8% assumed-return convention, net of
   a simplified charge model (`lib/investmentEngine.ts`) — no NAV volatility,
   no mortality table, clearly labeled as indicative.
+- **Marine & fire has no instant quote either, for a different reason than
+  group medical.** Commercial property (fire) pricing depends on
+  construction, occupancy, and fire safety measures, and cargo (marine)
+  pricing depends on transit mode, route, and cargo type — both are
+  underwriting-heavy, and larger fire sums insured typically need a
+  physical survey before an insurer will quote at all. `/marine-fire`
+  (`components/CommercialEnquiryForm.tsx`) lets the customer pick fire or
+  marine and shows the relevant fields, then hands straight to a specialist
+  like the group medical flow does.
 - **Admin dashboard auth** (`/admin`) is a single shared password
   (`ADMIN_PASSWORD`) behind an httpOnly cookie — enough for one or two people
   reviewing leads early on. Replace with real per-user auth before handing
@@ -102,18 +116,20 @@ app/
   advisor/page.tsx          The needs → quotes → chat → lead flow (consumer)
   business/page.tsx          The group medical enquiry flow (B2B)
   invest/page.tsx             The investment-linked (ULIP) flow
+  marine-fire/page.tsx        The fire/property + marine cargo enquiry flow (B2B)
   admin/page.tsx             Leads dashboard (password-gated)
   api/quotes/route.ts       Computes indicative quotes (lib/quoteEngine.ts)
   api/chat/route.ts          AI advisor chat (lib/chat.ts)
   api/leads/route.ts         Saves a lead, any flow (lib/db.ts)
   api/admin/login/route.ts   Admin cookie auth
 components/                UI for each flow (advisor, group enquiry, invest,
-                             admin); HandoffDone.tsx is the shared WhatsApp/
-                             call step, ChatWidget.tsx is the shared AI chat UI
+                             commercial enquiry, admin); HandoffDone.tsx is the
+                             shared WhatsApp/call step, ChatWidget.tsx is the
+                             shared AI chat UI
 lib/
   types.ts                  Shared domain types (NeedsInput, InsurerPlan, Quote,
                               GroupMedicalEnquiry, InvestmentNeedsInput/Plan/
-                              Illustration, Lead)
+                              Illustration, CommercialEnquiry/Fire/Marine, Lead)
   plans.ts                   Mock term/health insurer data — replace with a
                               real feed later
   quoteEngine.ts              Term/health cover recommendation + premium + ranking
@@ -131,8 +147,10 @@ lib/
 - Real insurer/aggregator API integration (quotes/illustrations are
   illustrative, not live rates)
 - Payment / policy issuance (out of scope — a licensed advisor closes off-app)
-- Marine & fire (commercial) — the landing page collects waitlist interest;
-  it's last in the Phase 1 sequencing (niche, relationship-driven B2B, low
-  fit for a self-serve app)
 - Automated renewal reminders / cross-sell (Phase 2)
 - Multi-language advisor conversation (Phase 3)
+
+All five product lines from the Phase 1 sequencing (term, health, group
+medical, investment-linked, marine & fire) now have a flow — the remaining
+gaps above are cross-cutting infrastructure (Phase 2/3), not missing
+product lines.

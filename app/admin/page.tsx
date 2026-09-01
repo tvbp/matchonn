@@ -1,10 +1,21 @@
 import { cookies } from "next/headers";
 import { ADMIN_COOKIE_NAME, isValidAdminToken } from "@/lib/adminAuth";
 import { listLeads } from "@/lib/db";
+import { Lead } from "@/lib/types";
 import AdminLogin from "@/components/AdminLogin";
 import AdminLogoutButton from "@/components/AdminLogoutButton";
 
 export const dynamic = "force-dynamic";
+
+function companyLabel(lead: Lead): string {
+  if (lead.groupMedicalEnquiry) {
+    return `${lead.groupMedicalEnquiry.companyName} (${lead.groupMedicalEnquiry.employeeCount} employees)`;
+  }
+  if (lead.commercialEnquiry) {
+    return `${lead.commercialEnquiry.companyName} (${lead.commercialEnquiry.lineType})`;
+  }
+  return "—";
+}
 
 export default async function AdminPage() {
   const token = cookies().get(ADMIN_COOKIE_NAME)?.value;
@@ -47,11 +58,7 @@ export default async function AdminPage() {
                     {new Date(lead.createdAt).toLocaleString("en-IN")}
                   </td>
                   <td className="px-4 py-3 font-medium text-slate-900">{lead.name}</td>
-                  <td className="px-4 py-3 text-slate-600">
-                    {lead.groupMedicalEnquiry
-                      ? `${lead.groupMedicalEnquiry.companyName} (${lead.groupMedicalEnquiry.employeeCount} employees)`
-                      : "—"}
-                  </td>
+                  <td className="px-4 py-3 text-slate-600">{companyLabel(lead)}</td>
                   <td className="px-4 py-3">{lead.phone}</td>
                   <td className="px-4 py-3">{lead.city}</td>
                   <td className="px-4 py-3">

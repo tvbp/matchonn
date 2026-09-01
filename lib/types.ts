@@ -90,6 +90,44 @@ export interface InvestmentIllustration {
   projectedValueAt8Pct: number;
 }
 
+export type CommercialLineType = "fire" | "marine";
+
+export interface FireEnquiry {
+  propertyType: string; // e.g. "Factory / Industrial", "Warehouse", "Office / Retail", "Other"
+  constructionType: "RCC" | "Other";
+  sumInsuredBuildingLakh: number;
+  sumInsuredStockMachineryLakh: number;
+  hasFireSafetySystems: boolean;
+  claimsInLast3Years: boolean;
+}
+
+export interface MarineEnquiry {
+  cargoType: string; // e.g. "General merchandise", "Machinery", "Electronics", "Perishables", "Other"
+  transitMode: "Sea" | "Air" | "Road" | "Rail" | "Multimodal";
+  tradeType: "Domestic" | "Import" | "Export" | "Import & Export";
+  annualShipmentValueLakh: number;
+  singleLargestConsignmentLakh: number;
+}
+
+/**
+ * Marine and fire are commercial/property lines — pricing depends on
+ * underwriting detail (construction, occupancy, cargo/transit risk) and
+ * often a physical survey for larger sums insured, so like group medical
+ * this is an RFQ enquiry an advisor runs, not a self-serve instant quote.
+ */
+export interface CommercialEnquiry {
+  lineType: CommercialLineType;
+  companyName: string;
+  industry: string;
+  cityTier: 1 | 2 | 3;
+  currentlyInsured: boolean;
+  currentInsurer?: string;
+  renewalMonth?: string;
+  contactDesignation: string;
+  fire?: FireEnquiry;
+  marine?: MarineEnquiry;
+}
+
 export interface Lead {
   id: string;
   createdAt: string;
@@ -102,8 +140,9 @@ export interface Lead {
   groupMedicalEnquiry?: GroupMedicalEnquiry;
   investmentNeeds?: InvestmentNeedsInput;
   suitabilityAcknowledged?: boolean;
+  commercialEnquiry?: CommercialEnquiry;
   interestedIn: string[];
-  waitlistProducts?: string[]; // e.g. "marine-fire"
+  waitlistProducts?: string[];
   consentGiven: boolean;
   advisorSummary?: string;
   source: string;
