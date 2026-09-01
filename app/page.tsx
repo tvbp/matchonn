@@ -14,7 +14,6 @@ const LIVE_PRODUCTS = [
 ];
 
 const COMING_SOON = [
-  { key: "group-medical", title: "Group Medical (for employers)" },
   { key: "investment", title: "Investment-linked plans (ULIP / endowment)" },
   { key: "marine-fire", title: "Marine & Fire (commercial)" },
 ];
@@ -73,6 +72,23 @@ export default function HomePage() {
             </Link>
           ))}
         </div>
+
+        <Link
+          href="/business"
+          className="mt-10 flex flex-col items-start justify-between gap-4 rounded-2xl border border-brand-200 bg-brand-50 p-6 shadow-sm transition hover:border-brand-400 hover:shadow-md sm:flex-row sm:items-center"
+        >
+          <div>
+            <span className="rounded-full bg-brand-600 px-3 py-1 text-xs font-semibold text-white">
+              For employers
+            </span>
+            <h3 className="mt-3 text-lg font-semibold text-slate-900">Group Medical Insurance for your team</h3>
+            <p className="mt-1 text-sm text-slate-600">
+              Tell us about your company once — a specialist runs it as an RFQ across our insurer panel and
+              gets back to you with real quotes.
+            </p>
+          </div>
+          <span className="whitespace-nowrap text-sm font-semibold text-brand-600">Get a quote for your team →</span>
+        </Link>
 
         <h3 className="mt-14 text-center text-lg font-semibold text-slate-700">
           Coming soon — join the waitlist

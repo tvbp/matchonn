@@ -33,6 +33,24 @@ export interface Quote {
   estimatedMonthlyPremium: number;
 }
 
+/**
+ * Group medical is a B2B, advisor-led enquiry rather than a self-serve
+ * quote — actual pricing depends on group composition and claims history,
+ * so insurers quote it via RFQ, not an instant rate card like retail term
+ * or health. This captures what an advisor needs to run that RFQ.
+ */
+export interface GroupMedicalEnquiry {
+  companyName: string;
+  industry: string;
+  employeeCount: number;
+  cityTier: 1 | 2 | 3;
+  currentlyInsured: boolean;
+  currentInsurer?: string;
+  desiredSumInsuredLakh: number;
+  renewalMonth?: string; // e.g. "2026-04", from an <input type="month">
+  contactDesignation: string;
+}
+
 export interface Lead {
   id: string;
   createdAt: string;
@@ -40,10 +58,11 @@ export interface Lead {
   phone: string;
   email?: string;
   city: string;
-  needs: NeedsInput;
+  needs?: NeedsInput;
   selectedPlanId?: string;
-  interestedIn: ProductType[];
-  waitlistProducts?: string[]; // e.g. "group-medical", "investment", "marine-fire"
+  groupMedicalEnquiry?: GroupMedicalEnquiry;
+  interestedIn: string[];
+  waitlistProducts?: string[]; // e.g. "investment", "marine-fire"
   consentGiven: boolean;
   advisorSummary?: string;
   source: string;

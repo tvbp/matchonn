@@ -32,6 +32,7 @@ export default async function AdminPage() {
               <tr>
                 <th className="px-4 py-3">Date</th>
                 <th className="px-4 py-3">Name</th>
+                <th className="px-4 py-3">Company</th>
                 <th className="px-4 py-3">Phone</th>
                 <th className="px-4 py-3">City</th>
                 <th className="px-4 py-3">Interested in</th>
@@ -46,6 +47,11 @@ export default async function AdminPage() {
                     {new Date(lead.createdAt).toLocaleString("en-IN")}
                   </td>
                   <td className="px-4 py-3 font-medium text-slate-900">{lead.name}</td>
+                  <td className="px-4 py-3 text-slate-600">
+                    {lead.groupMedicalEnquiry
+                      ? `${lead.groupMedicalEnquiry.companyName} (${lead.groupMedicalEnquiry.employeeCount} employees)`
+                      : "—"}
+                  </td>
                   <td className="px-4 py-3">{lead.phone}</td>
                   <td className="px-4 py-3">{lead.city}</td>
                   <td className="px-4 py-3">
@@ -57,7 +63,7 @@ export default async function AdminPage() {
               ))}
               {leads.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-slate-400">
+                  <td colSpan={8} className="px-4 py-8 text-center text-slate-400">
                     No leads yet.
                   </td>
                 </tr>

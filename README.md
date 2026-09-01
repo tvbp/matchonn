@@ -1,8 +1,14 @@
 # Matchonn
 
 Phase 1 MVP of an AI-assisted, human-closed insurance distribution app for
-India: needs-analysis → multi-insurer quote comparison → AI advisor chat →
-lead capture → WhatsApp handoff to a licensed advisor.
+India:
+- **Consumer (term life / health):** needs-analysis → multi-insurer quote
+  comparison → AI advisor chat → lead capture → WhatsApp handoff to a
+  licensed advisor.
+- **Group medical (B2B, `/business`):** a company enquiry form → lead capture
+  → WhatsApp handoff to a specialist who runs it as an RFQ across the
+  insurer panel — no instant quote, since group pricing depends on group
+  composition and claims history.
 
 See the business plan this app implements for the licensing path, commission
 economics, and the human → AI-assisted → AI-led roadmap this MVP is Phase 1
@@ -26,6 +32,13 @@ of.
   a single-instance pilot. Move to Postgres (or your CRM of choice) once you
   run more than one app instance or need concurrent-write safety — only
   `lib/db.ts` needs to change.
+- **Group medical has no instant quote step, on purpose.** Unlike term/health,
+  group premiums depend on employee composition and claims history, which
+  insurers only quote via an actual RFQ — so `/business`
+  (`components/GroupEnquiryForm.tsx`) collects structured requirements
+  (headcount, industry, desired cover, current insurer/renewal date) and
+  hands straight to a specialist rather than pretending to price it
+  instantly.
 - **Admin dashboard auth** (`/admin`) is a single shared password
   (`ADMIN_PASSWORD`) behind an httpOnly cookie — enough for one or two people
   reviewing leads early on. Replace with real per-user auth before handing
@@ -66,18 +79,22 @@ quotes and a rule-based AI advisor fallback; the leads dashboard is at
 ```
 app/
   page.tsx                 Landing page
-  advisor/page.tsx          The needs → quotes → chat → lead flow
+  advisor/page.tsx          The needs → quotes → chat → lead flow (consumer)
+  business/page.tsx          The group medical enquiry flow (B2B)
   admin/page.tsx             Leads dashboard (password-gated)
   api/quotes/route.ts       Computes indicative quotes (lib/quoteEngine.ts)
   api/chat/route.ts          AI advisor chat (lib/chat.ts)
-  api/leads/route.ts         Saves a lead (lib/db.ts)
+  api/leads/route.ts         Saves a lead, consumer or B2B (lib/db.ts)
   api/admin/login/route.ts   Admin cookie auth
-components/                UI for each step of the advisor flow
+components/                UI for each flow (advisor, group enquiry, admin);
+                             HandoffDone.tsx is the shared WhatsApp/call step
 lib/
-  types.ts                  Shared domain types (NeedsInput, InsurerPlan, Quote, Lead)
+  types.ts                  Shared domain types (NeedsInput, InsurerPlan, Quote,
+                              GroupMedicalEnquiry, Lead)
   plans.ts                   Mock insurer/plan data — replace with a real feed later
   quoteEngine.ts              Cover recommendation + premium estimate + ranking
   chat.ts                     AI advisor (Claude) + offline fallback
+  whatsapp.ts                  Builds the wa.me handoff link
   db.ts                       JSON file-backed lead store
   adminAuth.ts                 Admin cookie token logic
 ```
@@ -86,8 +103,9 @@ lib/
 
 - Real insurer/aggregator API integration (quotes are illustrative)
 - Payment / policy issuance (out of scope — a licensed advisor closes off-app)
-- Group medical, investment-linked (ULIP/endowment), and marine & fire lines
-  — the landing page collects waitlist interest for these but the advisor
-  flow only covers term life and health, per the Phase 1 product sequencing
+- Investment-linked (ULIP/endowment) and marine & fire lines — the landing
+  page collects waitlist interest for these, per the Phase 1 product
+  sequencing (they're deliberately last: highest mis-selling risk /
+  lowest fit for a self-serve app)
 - Automated renewal reminders / cross-sell (Phase 2)
 - Multi-language advisor conversation (Phase 3)

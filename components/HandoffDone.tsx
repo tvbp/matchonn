@@ -1,0 +1,48 @@
+/** "919876543210" -> "+91 98765 43210" (falls back to a "+" prefix for
+ * unrecognized lengths, e.g. non-Indian numbers). */
+export function formatPhoneDisplay(number: string): string {
+  if (number.length === 12 && number.startsWith("91")) {
+    return `+91 ${number.slice(2, 7)} ${number.slice(7)}`;
+  }
+  return `+${number}`;
+}
+
+export default function HandoffDone({
+  whatsappLink,
+  advisorNumber,
+  heading = "You're all set!",
+  description,
+}: {
+  whatsappLink: string;
+  advisorNumber: string;
+  heading?: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-2xl bg-white p-8 text-center shadow-sm">
+      <p className="text-lg font-semibold text-slate-900">{heading}</p>
+      <p className="mt-2 text-sm text-slate-600">{description}</p>
+      <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+        <a
+          href={whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block rounded-lg bg-green-600 px-6 py-3 text-sm font-semibold text-white hover:bg-green-700"
+        >
+          Continue on WhatsApp
+        </a>
+        <a
+          href={`tel:+${advisorNumber}`}
+          className="inline-block rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:border-slate-400"
+        >
+          Call instead
+        </a>
+      </div>
+      <p className="mt-4 text-xs text-slate-500">
+        WhatsApp link not opening? Message or call us directly at{" "}
+        <span className="font-medium text-slate-700">{formatPhoneDisplay(advisorNumber)}</span>. We also
+        have your details already — an advisor may reach out to you first.
+      </p>
+    </div>
+  );
+}
