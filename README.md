@@ -30,6 +30,15 @@ of.
   (`ADMIN_PASSWORD`) behind an httpOnly cookie — enough for one or two people
   reviewing leads early on. Replace with real per-user auth before handing
   dashboard access to a larger team.
+- **WhatsApp handoff is a plain `wa.me` click-to-chat link, not a WhatsApp
+  Business API integration.** No BSP (Gupshup/Interakt/Wati/AiSensy) or Meta
+  Cloud API account is needed for this — a human advisor just replies from
+  their own WhatsApp Business app, which is the right amount of automation
+  for the human-in-the-loop Phase 1. A `tel:` call fallback and the plain
+  phone number are also shown in case `wa.me` is blocked (some in-app
+  browsers do this). Revisit this only when Phase 2/3 needs automated/AI-sent
+  messages or template messages outside the 24-hour customer-initiated
+  window — that's when a real WhatsApp Business API provider earns its cost.
 
 ## Setup
 

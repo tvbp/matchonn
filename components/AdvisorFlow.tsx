@@ -9,6 +9,15 @@ import { NeedsInput, ProductType, Quote } from "@/lib/types";
 
 type Step = "needs" | "quotes" | "lead" | "done";
 
+/** "919876543210" -> "+91 98765 43210" (falls back to a "+" prefix for
+ * unrecognized lengths, e.g. non-Indian numbers). */
+function formatPhoneDisplay(number: string): string {
+  if (number.length === 12 && number.startsWith("91")) {
+    return `+91 ${number.slice(2, 7)} ${number.slice(7)}`;
+  }
+  return `+${number}`;
+}
+
 const STEPS: { key: Step; label: string }[] = [
   { key: "needs", label: "Your needs" },
   { key: "quotes", label: "Compare & ask AI" },
@@ -22,6 +31,7 @@ export default function AdvisorFlow({ initialProduct }: { initialProduct: Produc
   const [selectedPlanId, setSelectedPlanId] = useState<string | undefined>();
   const [submitting, setSubmitting] = useState(false);
   const [whatsappLink, setWhatsappLink] = useState<string | null>(null);
+  const [advisorNumber, setAdvisorNumber] = useState<string | null>(null);
 
   async function handleNeedsSubmit(input: NeedsInput) {
     setNeeds(input);
@@ -62,6 +72,7 @@ export default function AdvisorFlow({ initialProduct }: { initialProduct: Produc
         `Hi, I'm ${values.name}. ${summary}. Please help me with the next steps.`
       );
       setWhatsappLink(`https://wa.me/${number}?text=${message}`);
+      setAdvisorNumber(number);
       setStep("done");
     }
   }
@@ -102,20 +113,33 @@ export default function AdvisorFlow({ initialProduct }: { initialProduct: Produc
 
       {step === "lead" && <LeadForm onSubmit={handleLeadSubmit} submitting={submitting} />}
 
-      {step === "done" && whatsappLink && (
+      {step === "done" && whatsappLink && advisorNumber && (
         <div className="rounded-2xl bg-white p-8 text-center shadow-sm">
           <p className="text-lg font-semibold text-slate-900">You&apos;re all set!</p>
           <p className="mt-2 text-sm text-slate-600">
             Continue the conversation with a licensed advisor on WhatsApp — they&apos;ll confirm details and take you through the actual purchase.
           </p>
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-block rounded-lg bg-green-600 px-6 py-3 text-sm font-semibold text-white hover:bg-green-700"
-          >
-            Continue on WhatsApp
-          </a>
+          <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block rounded-lg bg-green-600 px-6 py-3 text-sm font-semibold text-white hover:bg-green-700"
+            >
+              Continue on WhatsApp
+            </a>
+            <a
+              href={`tel:+${advisorNumber}`}
+              className="inline-block rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:border-slate-400"
+            >
+              Call instead
+            </a>
+          </div>
+          <p className="mt-4 text-xs text-slate-500">
+            WhatsApp link not opening? Message or call us directly at{" "}
+            <span className="font-medium text-slate-700">{formatPhoneDisplay(advisorNumber)}</span>. We also
+            have your details already — an advisor may reach out to you first.
+          </p>
         </div>
       )}
     </div>
