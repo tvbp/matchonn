@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Manrope, Inter } from "next/font/google";
+import { Source_Serif_4, Work_Sans } from "next/font/google";
 import "./globals.css";
 
-const heading = Manrope({
+const heading = Source_Serif_4({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: ["600", "700"],
   variable: "--font-heading",
 });
 
-const body = Inter({
+const body = Work_Sans({
   subsets: ["latin"],
   variable: "--font-body",
 });

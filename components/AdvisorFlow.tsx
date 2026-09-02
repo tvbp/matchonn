@@ -85,7 +85,7 @@ export default function AdvisorFlow({ initialProduct }: { initialProduct: Produc
           </div>
           <button
             onClick={() => setStep("lead")}
-            className="w-full rounded-lg bg-accent-500 py-3 text-sm font-semibold text-white hover:bg-accent-600"
+            className="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white hover:bg-brand-700"
           >
             {selectedPlanId ? "Talk to an advisor about this plan" : "Talk to an advisor"}
           </button>

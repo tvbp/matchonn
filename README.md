@@ -25,18 +25,30 @@ of.
 
 ## Design system
 
-- **Colors** (`tailwind.config.ts`): `brand` (indigo) for navigation, links,
-  and secondary emphasis; `accent` (coral) reserved for primary calls to
-  action — every "submit"/"continue"/"talk to an advisor" button across every
-  flow uses `accent`, so there's one consistent color that means "the next
-  step," not indigo doing double duty as both a brand color and a CTA color.
-- **Type**: Manrope for headings (`font-heading`, wired to `h1`-`h4` globally
-  in `app/globals.css` — no per-component class needed), Inter for body text,
-  both loaded via `next/font/google` in `app/layout.tsx`.
+"Warm Trust" — a fintech-serious direction chosen from three mocked-up
+options (see the design canvas process below), not a color swap on top of
+the earlier indigo/coral pass.
+
+- **Colors** (`tailwind.config.ts`): a single sage-green `brand` scale
+  (anchored on `#3F5D46`) used for both links and primary CTAs — Warm Trust
+  deliberately doesn't split these into two colors the way the earlier,
+  rejected pass did. Neutrals are Tailwind's built-in `stone` scale (warm
+  gray) instead of `slate` (cool gray), everywhere.
+- **Type**: Source Serif 4 for headings (`font-heading`, wired to `h1`-`h4`
+  globally in `app/globals.css` — no per-component class needed), Work Sans
+  for body text, both loaded via `next/font/google` in `app/layout.tsx`.
+- **No icons.** The landing page and cards use plain text + a subtle
+  border/shadow, not icon badges — dropped entirely after the first
+  (rejected) pass's icon-heavy cards read as generic rather than premium.
 - **Shared UI**: `components/Stepper.tsx` (progress steps), `components/
   FlowHeader.tsx` (the back-to-home header every flow page uses),
   `components/HandoffDone.tsx` (WhatsApp/call completion screen) — reused
   across every flow instead of each page rolling its own.
+- **Process**: this direction was chosen from a 3-option mockup (Claude
+  Design canvas: Minimal/Stripe-like, Warm Trust/Mercury-like, Bold
+  Type/Ramp-like) reviewed and picked before any app code changed, rather
+  than iterating blind on Tailwind classes — the first design pass on this
+  app was done that way and didn't land.
 
 ## Why it's built this way
 

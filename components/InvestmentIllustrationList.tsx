@@ -35,7 +35,7 @@ export default function InvestmentIllustrationList({
           className={`relative block w-full rounded-2xl border p-5 text-left transition ${
             selectedPlanId === i.plan.id
               ? "border-brand-600 bg-brand-50 ring-1 ring-brand-600"
-              : "border-slate-200 bg-white hover:border-brand-300 hover:shadow-sm"
+              : "border-stone-200 bg-white hover:border-brand-300 hover:shadow-sm"
           }`}
         >
           {selectedPlanId === i.plan.id && (
@@ -52,25 +52,25 @@ export default function InvestmentIllustrationList({
                   Matches your risk profile
                 </span>
               )}
-              <p className="font-semibold text-slate-900">
+              <p className="font-semibold text-stone-900">
                 {i.plan.insurer} — {i.plan.planName}
               </p>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-stone-500">
                 Lock-in: {i.plan.lockInYears} years · Fund management charge: {i.plan.annualFundManagementChargePct}%/yr
                 · Allocation charge (yr 1): {i.plan.premiumAllocationChargeYear1Pct}%
               </p>
             </div>
             <div className="shrink-0 text-right">
-              <p className="text-xs text-slate-500">Total invested (₹{i.totalPremiumsPaid.toLocaleString("en-IN")})</p>
+              <p className="text-xs text-stone-500">Total invested (₹{i.totalPremiumsPaid.toLocaleString("en-IN")})</p>
               <p className="text-sm font-bold text-brand-700">
                 ₹{i.projectedValueAt4Pct.toLocaleString("en-IN")} – ₹{i.projectedValueAt8Pct.toLocaleString("en-IN")}
               </p>
-              <p className="text-xs text-slate-400">projected @ 4%–8% (not guaranteed)</p>
+              <p className="text-xs text-stone-400">projected @ 4%–8% (not guaranteed)</p>
             </div>
           </div>
           <ul className="mt-3 flex flex-wrap gap-2">
             {i.plan.highlights.map((h) => (
-              <li key={h} className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">
+              <li key={h} className="rounded-full bg-stone-100 px-3 py-1 text-xs text-stone-600">
                 {h}
               </li>
             ))}

@@ -10,7 +10,7 @@ export default function AdminLogoutButton() {
         await fetch("/api/admin/login", { method: "DELETE" });
         router.refresh();
       }}
-      className="text-sm font-medium text-slate-500 hover:text-slate-700"
+      className="text-sm font-medium text-stone-500 hover:text-stone-700"
     >
       Sign out
     </button>

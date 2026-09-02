@@ -7,11 +7,11 @@ html {
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 font-sans;
+  @apply bg-stone-50 text-stone-900 font-sans;
 }
 
 h1, h2, h3, h4 {
-  @apply font-heading tracking-tight;
+  @apply font-heading;
 }
 
 input, select, textarea {

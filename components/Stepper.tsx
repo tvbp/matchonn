@@ -24,21 +24,21 @@ export default function Stepper({ steps, currentKey }: { steps: StepDef[]; curre
                     ? "bg-brand-600 text-white"
                     : isCurrent
                       ? "border-2 border-brand-600 bg-white text-brand-600"
-                      : "border-2 border-slate-200 bg-white text-slate-400"
+                      : "border-2 border-stone-200 bg-white text-stone-400"
                 }`}
               >
                 {isDone ? "✓" : i + 1}
               </span>
               <span
                 className={`w-20 text-xs font-medium leading-tight ${
-                  isDone || isCurrent ? "text-slate-700" : "text-slate-400"
+                  isDone || isCurrent ? "text-stone-700" : "text-stone-400"
                 }`}
               >
                 {s.label}
               </span>
             </div>
             {i < steps.length - 1 && (
-              <span className={`mx-2 h-0.5 flex-1 ${isDone ? "bg-brand-600" : "bg-slate-200"}`} />
+              <span className={`mx-2 h-0.5 flex-1 ${isDone ? "bg-brand-600" : "bg-stone-200"}`} />
             )}
           </li>
         );

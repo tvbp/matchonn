@@ -46,12 +46,12 @@ export default function ChatWidget({
   }
 
   return (
-    <div className="flex h-[420px] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <div className="flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-4 py-3">
+    <div className="flex h-[420px] flex-col overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
+      <div className="flex items-center gap-2 border-b border-stone-200 bg-stone-50 px-4 py-3">
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
           AI
         </span>
-        <span className="text-sm font-semibold text-slate-800">Matchonn Advisor</span>
+        <span className="text-sm font-semibold text-stone-800">Matchonn Advisor</span>
       </div>
       <div className="flex-1 space-y-3 overflow-y-auto p-4">
         {turns.map((t, i) => (
@@ -59,22 +59,22 @@ export default function ChatWidget({
             key={i}
             className={`max-w-[85%] rounded-xl px-4 py-2 text-sm leading-relaxed ${
               t.role === "assistant"
-                ? "bg-slate-100 text-slate-800"
+                ? "bg-stone-100 text-stone-800"
                 : "ml-auto bg-brand-600 text-white"
             }`}
           >
             {t.content}
           </div>
         ))}
-        {loading && <div className="text-xs text-slate-400">Advisor is typing...</div>}
+        {loading && <div className="text-xs text-stone-400">Advisor is typing...</div>}
       </div>
-      <div className="flex gap-2 border-t border-slate-200 p-3">
+      <div className="flex gap-2 border-t border-stone-200 p-3">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
           placeholder="Ask about cover, premium, claims..."
-          className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+          className="flex-1 rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
         />
         <button
           onClick={send}

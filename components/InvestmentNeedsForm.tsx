@@ -29,31 +29,31 @@ export default function InvestmentNeedsForm({
     >
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700">Age</label>
+          <label className="block text-sm font-medium text-stone-700">Age</label>
           <input
             type="number"
             min={18}
             max={65}
             value={age}
             onChange={(e) => setAge(Number(e.target.value))}
-            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+            className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700">Annual premium you want to invest (₹)</label>
+          <label className="block text-sm font-medium text-stone-700">Annual premium you want to invest (₹)</label>
           <input
             type="number"
             min={24000}
             step={1000}
             value={annualPremium}
             onChange={(e) => setAnnualPremium(Number(e.target.value))}
-            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+            className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700">
+        <label className="block text-sm font-medium text-stone-700">
           Investment horizon (years) — minimum 5, the mandatory ULIP lock-in
         </label>
         <input
@@ -62,12 +62,12 @@ export default function InvestmentNeedsForm({
           max={30}
           value={horizonYears}
           onChange={(e) => setHorizonYears(Math.max(5, Number(e.target.value)))}
-          className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+          className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700">How do you feel about market ups and downs?</label>
+        <label className="block text-sm font-medium text-stone-700">How do you feel about market ups and downs?</label>
         <div className="mt-2 grid gap-3 sm:grid-cols-3">
           {RISK_OPTIONS.map((opt) => (
             <button
@@ -77,11 +77,11 @@ export default function InvestmentNeedsForm({
               className={`rounded-lg border px-3 py-3 text-left text-sm ${
                 riskAppetite === opt.value
                   ? "border-brand-600 bg-brand-50 text-brand-700"
-                  : "border-slate-200 text-slate-600 hover:border-slate-300"
+                  : "border-stone-200 text-stone-600 hover:border-stone-300"
               }`}
             >
               <span className="block font-semibold">{opt.label}</span>
-              <span className="mt-1 block text-xs text-slate-500">{opt.hint}</span>
+              <span className="mt-1 block text-xs text-stone-500">{opt.hint}</span>
             </button>
           ))}
         </div>
@@ -89,7 +89,7 @@ export default function InvestmentNeedsForm({
 
       <button
         type="submit"
-        className="w-full rounded-lg bg-accent-500 py-3 text-sm font-semibold text-white hover:bg-accent-600"
+        className="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white hover:bg-brand-700"
       >
         Continue
       </button>

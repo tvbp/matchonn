@@ -8,33 +8,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Deep indigo — primary interactive color (buttons, links, active states).
+        // Muted sage green — the single interactive color, used for both
+        // links and primary CTAs (Warm Trust direction deliberately does
+        // not split these into two brand colors).
         brand: {
-          50: "#eef2ff",
-          100: "#e0e7ff",
-          200: "#c7d2fe",
-          300: "#a5b4fc",
-          400: "#818cf8",
-          500: "#6366f1",
-          600: "#4f46e5",
-          700: "#4338ca",
-          800: "#3730a3",
-          900: "#312e81",
-        },
-        // Warm coral — used sparingly for primary hero CTAs and key highlights.
-        accent: {
-          50: "#fff1ee",
-          100: "#ffe1da",
-          200: "#ffc4b6",
-          300: "#ff9d85",
-          400: "#ff7a57",
-          500: "#fa5a2e",
-          600: "#e0431a",
-          700: "#b93414",
+          50: "#F1F5F0",
+          100: "#DFE8DC",
+          200: "#C1D3BC",
+          300: "#9DB897",
+          400: "#729B6B",
+          500: "#527A4C",
+          600: "#3F5D46",
+          700: "#2E4735",
+          800: "#253A2B",
+          900: "#1D2E22",
         },
       },
       fontFamily: {
-        heading: ["var(--font-heading)", "ui-sans-serif", "system-ui", "sans-serif"],
+        heading: ["var(--font-heading)", "Georgia", "serif"],
         sans: ["var(--font-body)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
     },

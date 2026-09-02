@@ -21,7 +21,7 @@ export default function QuoteList({
 
   return (
     <div className="space-y-4">
-      <p className="text-xs text-slate-500">
+      <p className="text-xs text-stone-500">
         Indicative estimates for comparison only — not a final quote. Actual premium depends on medical underwriting and insurer terms.
       </p>
       {quotes.map((q, i) => (
@@ -32,7 +32,7 @@ export default function QuoteList({
           className={`relative block w-full rounded-2xl border p-5 text-left transition ${
             selectedPlanId === q.plan.id
               ? "border-brand-600 bg-brand-50 ring-1 ring-brand-600"
-              : "border-slate-200 bg-white hover:border-brand-300 hover:shadow-sm"
+              : "border-stone-200 bg-white hover:border-brand-300 hover:shadow-sm"
           }`}
         >
           {selectedPlanId === q.plan.id && (
@@ -49,22 +49,22 @@ export default function QuoteList({
                   Best match
                 </span>
               )}
-              <p className="font-semibold text-slate-900">
+              <p className="font-semibold text-stone-900">
                 {q.plan.insurer} — {q.plan.planName}
               </p>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-stone-500">
                 Cover: ₹{q.recommendedCoverLakh} lakh · Claim settlement ratio: {q.plan.claimSettlementRatio}%
                 {q.plan.networkHospitals ? ` · ${q.plan.networkHospitals.toLocaleString("en-IN")} network hospitals` : ""}
               </p>
             </div>
             <div className="shrink-0 text-right">
               <p className="text-lg font-bold text-brand-700">₹{q.estimatedMonthlyPremium.toLocaleString("en-IN")}/mo</p>
-              <p className="text-xs text-slate-500">₹{q.estimatedAnnualPremium.toLocaleString("en-IN")}/yr</p>
+              <p className="text-xs text-stone-500">₹{q.estimatedAnnualPremium.toLocaleString("en-IN")}/yr</p>
             </div>
           </div>
           <ul className="mt-3 flex flex-wrap gap-2">
             {q.plan.highlights.map((h) => (
-              <li key={h} className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">
+              <li key={h} className="rounded-full bg-stone-100 px-3 py-1 text-xs text-stone-600">
                 {h}
               </li>
             ))}

@@ -67,23 +67,23 @@ export default function GroupEnquiryForm({
       }}
     >
       <div>
-        <h3 className="font-semibold text-slate-900">About your company</h3>
+        <h3 className="font-semibold text-stone-900">About your company</h3>
         <div className="mt-3 grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-slate-700">Company name</label>
+            <label className="block text-sm font-medium text-stone-700">Company name</label>
             <input
               required
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700">Industry</label>
+            <label className="block text-sm font-medium text-stone-700">Industry</label>
             <select
               value={industry}
               onChange={(e) => setIndustry(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
             >
               {INDUSTRIES.map((i) => (
                 <option key={i} value={i}>
@@ -93,127 +93,127 @@ export default function GroupEnquiryForm({
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700">Number of employees to cover</label>
+            <label className="block text-sm font-medium text-stone-700">Number of employees to cover</label>
             <input
               required
               type="number"
               min={5}
               value={employeeCount}
               onChange={(e) => setEmployeeCount(Number(e.target.value))}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
             />
-            <p className="mt-1 text-xs text-slate-500">Most insurers need a minimum group size of ~7 employees.</p>
+            <p className="mt-1 text-xs text-stone-500">Most insurers need a minimum group size of ~7 employees.</p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700">City (HQ)</label>
+            <label className="block text-sm font-medium text-stone-700">City (HQ)</label>
             <input
               required
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
             />
           </div>
         </div>
       </div>
 
       <div>
-        <h3 className="font-semibold text-slate-900">Cover requirements</h3>
+        <h3 className="font-semibold text-stone-900">Cover requirements</h3>
         <div className="mt-3 grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-slate-700">Desired sum insured per employee (₹ lakh)</label>
+            <label className="block text-sm font-medium text-stone-700">Desired sum insured per employee (₹ lakh)</label>
             <input
               required
               type="number"
               min={1}
               value={desiredSumInsuredLakh}
               onChange={(e) => setDesiredSumInsuredLakh(Number(e.target.value))}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700">Current policy renewal month (if any)</label>
+            <label className="block text-sm font-medium text-stone-700">Current policy renewal month (if any)</label>
             <input
               type="month"
               value={renewalMonth}
               onChange={(e) => setRenewalMonth(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
             />
           </div>
         </div>
-        <label className="mt-3 flex items-center gap-2 text-sm text-slate-700">
+        <label className="mt-3 flex items-center gap-2 text-sm text-stone-700">
           <input
             type="checkbox"
             checked={currentlyInsured}
             onChange={(e) => setCurrentlyInsured(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300"
+            className="h-4 w-4 rounded border-stone-300"
           />
           We already have a group health policy
         </label>
         {currentlyInsured && (
           <div className="mt-3">
-            <label className="block text-sm font-medium text-slate-700">Current insurer</label>
+            <label className="block text-sm font-medium text-stone-700">Current insurer</label>
             <input
               value={currentInsurer}
               onChange={(e) => setCurrentInsurer(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
             />
           </div>
         )}
       </div>
 
       <div>
-        <h3 className="font-semibold text-slate-900">Contact details</h3>
+        <h3 className="font-semibold text-stone-900">Contact details</h3>
         <div className="mt-3 grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-slate-700">Your name</label>
+            <label className="block text-sm font-medium text-stone-700">Your name</label>
             <input
               required
               value={contactName}
               onChange={(e) => setContactName(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700">Designation</label>
+            <label className="block text-sm font-medium text-stone-700">Designation</label>
             <input
               required
               placeholder="e.g. HR Manager, Founder"
               value={contactDesignation}
               onChange={(e) => setContactDesignation(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700">Phone (WhatsApp)</label>
+            <label className="block text-sm font-medium text-stone-700">Phone (WhatsApp)</label>
             <input
               required
               type="tel"
               pattern="[0-9+ ]{10,15}"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700">Work email</label>
+            <label className="block text-sm font-medium text-stone-700">Work email</label>
             <input
               required
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
             />
           </div>
         </div>
       </div>
 
-      <label className="flex items-start gap-2 text-xs text-slate-600">
+      <label className="flex items-start gap-2 text-xs text-stone-600">
         <input
           required
           type="checkbox"
           checked={consentGiven}
           onChange={(e) => setConsentGiven(e.target.checked)}
-          className="mt-0.5 h-4 w-4 rounded border-slate-300"
+          className="mt-0.5 h-4 w-4 rounded border-stone-300"
         />
         I consent to Matchonn and its licensed advisors contacting our company about group insurance via phone,
         WhatsApp, or email, and understand that quotes are obtained from insurers on request (not instant) and
@@ -223,7 +223,7 @@ export default function GroupEnquiryForm({
       <button
         type="submit"
         disabled={submitting}
-        className="w-full rounded-lg bg-accent-500 py-3 text-sm font-semibold text-white hover:bg-accent-600 disabled:opacity-50"
+        className="w-full rounded-lg bg-brand-600 py-3 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-50"
       >
         {submitting ? "Sending..." : "Request group insurance quotes"}
       </button>
