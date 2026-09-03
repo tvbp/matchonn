@@ -135,6 +135,34 @@ quotes and a rule-based AI advisor fallback; the leads dashboard is at
 | `ADMIN_PASSWORD` | Yes, to use `/admin` | Password for the leads dashboard. |
 | `NEXT_PUBLIC_ADVISOR_WHATSAPP_NUMBER` | Yes, for real handoffs | WhatsApp number (country code, no `+`) the "Continue on WhatsApp" button links to. |
 
+## Deploying
+
+Leads are stored in a JSON file on disk (`lib/db.ts` → `data/leads.json`),
+which needs a host with a **persistent, long-running filesystem** — not a
+pure serverless platform like default Vercel, whose functions get an
+ephemeral filesystem per invocation and would silently lose leads. This app
+is set up for **Railway** (`railway.json` pins the Nixpacks builder and
+start command):
+
+1. railway.app → sign in with GitHub → New Project → Deploy from GitHub repo
+   → select this repo and branch.
+2. Service Settings → Volumes → add a volume mounted at `/app/data` (this is
+   where `process.cwd()/data` resolves inside the container). Without this
+   step leads still work, but don't survive a redeploy/restart.
+3. Service Variables → set `ADMIN_PASSWORD` and
+   `NEXT_PUBLIC_ADVISOR_WHATSAPP_NUMBER` at minimum (see the table above for
+   the rest). Deploy.
+4. Sanity check: submit one test lead, confirm it shows in `/admin`, restart
+   the service from the Railway dashboard, and confirm the lead is *still
+   there* — that's the real proof the volume is persisting.
+
+A custom domain can be attached later under Settings → Networking with no
+code changes; Railway gives a working `*.up.railway.app` URL immediately.
+
+If you outgrow single-instance file storage (multiple app instances, need
+for concurrent-write safety), swap `lib/db.ts` for a real database — nothing
+else in the app depends on how leads are stored.
+
 ## Project structure
 
 ```
